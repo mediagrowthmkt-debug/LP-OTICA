@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AMCC - Óticas | Recupere Valores de Clientes Inadimplentes Sem Custo Antecipado</title>
     <meta name="description" content="Sua ótica acumulou clientes que não pagaram? Recuperamos seu recebimento sem custo antecipado. Cobrança humanizada que preserva o cliente e tecnologia que entrega resultado real.">
     
@@ -37,6 +37,25 @@
             line-height: 1.6;
             color: var(--dark-modern);
             overflow-x: hidden;
+            /* FIX: Prevenir bounce no mobile quando teclado abre */
+            position: relative;
+        }
+        
+        /* FIX: Evitar scroll indesejado no formulário mobile */
+        @media (max-width: 768px) {
+            .form-container {
+                position: relative;
+                overflow: visible;
+            }
+            
+            .form-step {
+                min-height: auto;
+            }
+            
+            /* Prevenir zoom em inputs no iOS */
+            input, select, textarea {
+                font-size: 16px !important;
+            }
         }
 
         /* BOTÃO FLUTUANTE */
@@ -2294,8 +2313,9 @@
                     if (index === stepIndex) {
                         step.classList.add('active');
                         step.style.display = 'block';
+                        // FIX: Não fazer focus automático no mobile para evitar clipping
                         const input = step.querySelector('input, select');
-                        if (input) {
+                        if (input && window.innerWidth > 768) {
                             setTimeout(() => input.focus(), 100);
                         }
                     } else {
@@ -2317,6 +2337,16 @@
                 }
 
                 updateProgressBar();
+                
+                // FIX: Prevenir scroll indesejado no mobile
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: window.pageYOffset,
+                            behavior: 'auto'
+                        });
+                    }, 50);
+                }
             }
 
             function nextStep() {

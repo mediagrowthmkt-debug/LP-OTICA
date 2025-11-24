@@ -2283,8 +2283,15 @@
             history.scrollRestoration = 'manual';
         }
         
-        // Garantir que comece no topo ao carregar - SEM setTimeout
+        // Limpar hash da URL se existir e forçar topo
+        if (window.location.hash) {
+            history.replaceState(null, null, ' ');
+        }
+        
+        // Garantir que comece no topo ao carregar - IMEDIATAMENTE
         window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         
         // Animações on scroll - OTIMIZADO com passive listener
         const observerOptions = {
